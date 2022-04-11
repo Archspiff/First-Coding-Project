@@ -23,7 +23,7 @@ loadSprite("invis-wall", "sprites/blackking.png")
 
 
 const SPEED = 480
-const CHILD_SPEED = 50
+let CHILD_SPEED = 50
 
 const LEVELS = [
 [
@@ -103,7 +103,7 @@ origin("bot"),
     sprite("children"),
     scale(.3),
     area(),
-    solid(),
+    body(),
     origin("bot"),
     "danger",
     ],
@@ -112,7 +112,7 @@ origin("bot"),
       scale(.3),
       area(),
       origin("bot"),
-      "danger",
+
       ],
 })
 
@@ -161,11 +161,11 @@ score++
 scoreLabel.text = score
 })
 
-action('children', (s)=> {
+action('danger', (s)=> {
    s.move(CHILD_SPEED, 0)
 })
 
-onCollide('children', 'invis-wall', (s,p)=> {
+onCollide('danger', 'invis-wall', (s,p)=> {
    if(CHILD_SPEED == 50){
       s.flipX(false);
    }else{
