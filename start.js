@@ -8,9 +8,9 @@ loadSprite("stove", "/sprites/stove.jpg")
 loadSprite("floor", "/sprites/floor.png")
 //loadSprite("child", "/sprites/child.png")
 loadSprite("portal", "/sprites/portal.png")
-loadSprite("ketchup", "/sprites/blackking.png")
+loadSprite("ketchup", "/sprites/ketchup.png")
 loadSprite("spear", "/sprites/blackking.png")
-loadSprite("mustard", "/sprites/blackking.png")
+loadSprite("mustard", "/sprites/mustard.png")
 loadSprite("children", "/sprites/child.png")
 loadSprite("invis-wall", "sprites/wall.jpg")
 
@@ -28,9 +28,9 @@ const NSPEED = 480
 const MSPEED = 600 
 let SPEED = NSPEED
 
-const KDMG = 2
-const NDMG = 1
-let DMG = NDMG
+const KJUMP = 800
+const NJUMP = 650
+let JUMP = NJUMP
 
 
 const CHILD_SPEED = 250
@@ -41,17 +41,17 @@ const LEVELS = [
 "                 .                                       =",   
 "=             =   =   =                  =               =",
 "=@  |^ $$ +^|= |  + $   |   + ^^   |$  =    $ |    +  |, =",
-"=======================================================  =",
-"                                                         =",
-"                                                         =", 
-"  >  |  +  |                                             =",
+"======================================================   =",
+"                                                        ==",
+"                                                       = =", 
+"  >  |  +  |    +    | ^^^ +     |    +  |  +  +     |=  =",
 " =========================================================", 
                                                
 ],
 [
-"                   =    ",
-"@   $      =   =       >",
-"=   =   =              =",
+"=                   =    ",
+"=@   $      =   =       >",
+"==   =   =              =",
 ],
 ]
 
@@ -114,7 +114,7 @@ origin("bot"),
  ],
  ",": () =>[
     sprite("mustard"),
-    scale(.3),
+    scale(.1),
     area(),
     origin("bot"),
     "power",
@@ -124,7 +124,7 @@ origin("bot"),
     sprite("children"),
     scale(.2),
     area(),
-    body(),
+   // solid(),
     origin("bot"),
     "children",
     "danger",
@@ -149,7 +149,7 @@ const player = get("player")[0]
 // Movements
 onKeyPress("space", () => {
 if (player.isGrounded()) {
-player.jump()
+player.jump(JUMP)
 }
 })
 
@@ -168,7 +168,7 @@ player.move(SPEED, 0)
  
 player.onCollide("ketchup", (power) => {
 destroy(power)
-DMG = KDMG
+JUMP = KJUMP
 })
 
 player.onCollide("mustard", (power) => {
@@ -235,9 +235,12 @@ player.onCollide("portal", () => {
    else if (score >= 5){
     if (levelIdx < LEVELS.length - 1) {
     // If there's a next level, go() to the same scene but load the next level
+    SPEED = NSPEED,
+    JUMP = NJUMP,
     go("game", {
     levelIdx: levelIdx + 1,
         score: score,
+        score: 0,
 })
     } else {
     // Otherwise we have reached the end of game, go to "win" scene!
@@ -285,6 +288,8 @@ onKeyPress(start)
 
 function start() {
 // Start with the "game" scene, with initial parameters
+SPEED = NSPEED,
+JUMP = NJUMP,
 go("game", {
 levelIdx: 0,
 score: 0,
